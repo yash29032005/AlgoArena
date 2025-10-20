@@ -5,7 +5,7 @@ const CreateRoomModal = ({ onClose }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/40">
       {/* Modal Box */}
       <div className="bg-[#141414] border border-gray-800 rounded-xl p-6 w-full max-w-md shadow-lg relative">
-        <h2 className="text-lg font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold text-white mb-4">
           Create Battle Room
         </h2>
         <button

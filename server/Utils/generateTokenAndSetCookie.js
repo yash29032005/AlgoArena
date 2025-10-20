@@ -1,0 +1,19 @@
+const jwt = require("jsonwebtoken");
+
+// Helper to generate token & set cookie
+const generateTokenAndSetCookie = (userId, res) => {
+  const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    expiresIn: "1d",
+  });
+
+  res.cookie("auth_token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "None",
+    maxAge: 1 * 24 * 60 * 60 * 1000,
+  });
+
+  return token;
+};
+
+module.exports = generateTokenAndSetCookie;

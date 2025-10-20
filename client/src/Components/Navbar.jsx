@@ -1,10 +1,24 @@
-import React, { useState } from "react";
-import { LuSwords } from "react-icons/lu";
-import { CiTrophy } from "react-icons/ci";
+import { UserContext } from "@/Context/UserContext";
+import LoginModal from "@/Modals/LoginModal";
+import RegisterModal from "@/Modals/RegisterModal";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
+  const [registerModal, setRegisterModal] = useState(false);
+  const { user } = useContext(UserContext);
+
+  function openLogin() {
+    setLoginModal(true);
+    setRegisterModal(false);
+  }
+
+  function openRegister() {
+    setLoginModal(false);
+    setRegisterModal(true);
+  }
 
   return (
     <nav className="fixed top-5 left-0 w-full z-50 text-white">
@@ -43,12 +57,22 @@ const Navbar = () => {
           >
             Dashboard
           </div>
-          <div
-            className="bg-neon-gradient text-white px-4 py-2 rounded-4xl hover:opacity-80 
+          {user ? (
+            <div
+              className="bg-neon-gradient text-white px-4 py-2 rounded-4xl hover:opacity-80 
           cursor-pointer"
-          >
-            Login
-          </div>
+            >
+              {user.name}
+            </div>
+          ) : (
+            <div
+              onClick={openLogin}
+              className="bg-neon-gradient text-white px-4 py-2 rounded-4xl hover:opacity-80 
+          cursor-pointer"
+            >
+              Login
+            </div>
+          )}
         </div>
 
         {/* Hamburger (Mobile) */}
@@ -86,11 +110,29 @@ const Navbar = () => {
             <div className="hover:text-blue-500 transition cursor-pointer">
               Dashboard
             </div>
-            <div className="hover:text-blue-500 transition cursor-pointer">
+            <div
+              onClick={openLogin}
+              className="hover:text-blue-500 transition cursor-pointer"
+            >
               Login
             </div>
           </div>
         </div>
+      )}
+
+      {/* Login Modal */}
+      {loginModal && (
+        <LoginModal
+          onClose={() => setLoginModal(false)}
+          setLoginModal={setLoginModal}
+          openRegister={openRegister}
+        />
+      )}
+      {registerModal && (
+        <RegisterModal
+          onClose={() => setRegisterModal(false)}
+          openLogin={openLogin}
+        />
       )}
     </nav>
   );

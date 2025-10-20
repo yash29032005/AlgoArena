@@ -34,6 +34,13 @@ const battles = [
 const BattlePage = () => {
   const [openCreateRoomModal, setOpenCreateRoomModal] = useState(false);
   const [openJoinRoomModal, setOpenJoinRoomModal] = useState(false);
+  const [selectedBattle, setSelectedBattle] = useState(null);
+
+  const handleJoinClick = (battle) => {
+    if (battle.players === "4/4 players") return;
+    setSelectedBattle(battle);
+    setOpenJoinRoomModal(true);
+  };
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center px-6 py-10 pt-[100px]">
@@ -55,9 +62,6 @@ const BattlePage = () => {
           <FaPlus />
           <span className="hidden md:block">Create Room</span>
         </button>
-        {openCreateRoomModal && (
-          <CreateRoomModal onClose={() => setOpenCreateRoomModal(false)} />
-        )}
       </div>
 
       {/* Battle Cards */}
@@ -65,8 +69,7 @@ const BattlePage = () => {
         {battles.map((battle, idx) => (
           <div
             key={idx}
-            className="bg-[#141414] border border-gray-800 rounded-xl p-6 flex flex-col gap-3
-             hover:border-purple-600 transition"
+            className="bg-[#141414] border border-gray-800 rounded-xl p-6 flex flex-col gap-3 hover:border-purple-600 transition"
           >
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-bold">{battle.title}</h2>
@@ -82,34 +85,32 @@ const BattlePage = () => {
                 {battle.level}
               </span>
             </div>
+
             <p className="text-gray-400 text-sm">
               Compete against the best coders in real-time
             </p>
+
             <div className="flex justify-between items-center text-sm text-gray-500">
               <div>👥 {battle.players}</div>
               <div>⏱ {battle.time}</div>
             </div>
+
             <button
-              onClick={
-                battle.players !== "4/4 players"
-                  ? () => setOpenJoinRoomModal(true)
-                  : undefined
-              }
-              className={`w-full py-2 rounded-md bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:opacity-90 transition ${
+              onClick={() => handleJoinClick(battle)}
+              disabled={battle.players === "4/4 players"}
+              className={`w-full py-2 rounded-md bg-gradient-to-r from-purple-500 to-blue-500 text-white transition ${
                 battle.players === "4/4 players"
                   ? "opacity-50 cursor-not-allowed"
-                  : ""
+                  : "hover:opacity-90"
               }`}
             >
               {battle.players === "4/4 players" ? "Full" : "Join Room"}
             </button>
           </div>
         ))}
-        {openJoinRoomModal && (
-          <JoinRoomModal onClose={() => setOpenJoinRoomModal(false)} />
-        )}
       </div>
 
+      {/* How It Works */}
       <div className="w-full max-w-4xl bg-[#141414] border border-gray-800 rounded-xl p-6 mt-8">
         <div className="flex items-center gap-2 font-bold text-2xl">
           <BiTrophy />
@@ -122,6 +123,17 @@ const BattlePage = () => {
           <p>• The first correct solution wins the battle!</p>
         </div>
       </div>
+
+      {/* Modals */}
+      {openCreateRoomModal && (
+        <CreateRoomModal onClose={() => setOpenCreateRoomModal(false)} />
+      )}
+      {openJoinRoomModal && selectedBattle && (
+        <JoinRoomModal
+          battle={selectedBattle}
+          onClose={() => setOpenJoinRoomModal(false)}
+        />
+      )}
     </div>
   );
 };
