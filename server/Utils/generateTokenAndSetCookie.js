@@ -9,7 +9,7 @@ const generateTokenAndSetCookie = (userId, res) => {
   res.cookie("auth_token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "None",
+    sameSite: "strict",
     maxAge: 1 * 24 * 60 * 60 * 1000,
   });
 

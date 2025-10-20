@@ -4,23 +4,26 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { UserProvider } from "./Context/UserContext";
+import { BattleProvider } from "./Context/RoomContext";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <UserProvider>
-      <App />
-      <Toaster
-        toastOptions={{
-          // Define default options
-          className: "",
-          duration: 5000,
-          removeDelay: 1000,
-          style: {
-            background: "#000",
-            color: "#fff",
-          },
-        }}
-      />
+      <BattleProvider>
+        <App />
+        <Toaster
+          toastOptions={{
+            // Define default options
+            className: "",
+            duration: 5000,
+            removeDelay: 1000,
+            style: {
+              background: "#000",
+              color: "#fff",
+            },
+          }}
+        />
+      </BattleProvider>
     </UserProvider>
   </BrowserRouter>
 );

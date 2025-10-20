@@ -1,40 +1,15 @@
+import { BattleContext } from "@/Context/RoomContext";
 import CreateRoomModal from "@/Modals/CreateRoomModal";
 import JoinRoomModal from "@/Modals/JoinRoomModal";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { BiSearch, BiTrophy } from "react-icons/bi";
 import { FaPlus } from "react-icons/fa";
-
-const battles = [
-  {
-    title: "Beginner's Arena",
-    level: "EASY",
-    players: "3/4 players",
-    time: "15 min",
-  },
-  {
-    title: "Algorithm Warfare",
-    level: "MEDIUM",
-    players: "2/4 players",
-    time: "30 min",
-  },
-  {
-    title: "Elite Coders Only",
-    level: "HARD",
-    players: "1/2 players",
-    time: "45 min",
-  },
-  {
-    title: "Speed Coding",
-    level: "EASY",
-    players: "4/4 players",
-    time: "10 min",
-  },
-];
 
 const BattlePage = () => {
   const [openCreateRoomModal, setOpenCreateRoomModal] = useState(false);
   const [openJoinRoomModal, setOpenJoinRoomModal] = useState(false);
   const [selectedBattle, setSelectedBattle] = useState(null);
+  const { rooms } = useContext(BattleContext);
 
   const handleJoinClick = (battle) => {
     if (battle.players === "4/4 players") return;
@@ -66,45 +41,43 @@ const BattlePage = () => {
 
       {/* Battle Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 w-full max-w-4xl">
-        {battles.map((battle, idx) => (
+        {rooms.map((room, idx) => (
           <div
             key={idx}
             className="bg-[#141414] border border-gray-800 rounded-xl p-6 flex flex-col gap-3 hover:border-purple-600 transition"
           >
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">{battle.title}</h2>
+              <h2 className="text-xl font-bold">{room.title}</h2>
               <span
                 className={`text-xs px-3 py-1 rounded-full ${
-                  battle.level === "EASY"
+                  room.level === "easy"
                     ? "bg-green-500/20 text-green-400"
-                    : battle.level === "MEDIUM"
+                    : room.level === "medium"
                     ? "bg-yellow-500/20 text-yellow-400"
                     : "bg-red-500/20 text-red-400"
                 }`}
               >
-                {battle.level}
+                {room.level.toLocaleUpperCase()}
               </span>
             </div>
 
-            <p className="text-gray-400 text-sm">
-              Compete against the best coders in real-time
-            </p>
+            <p className="text-gray-400 text-sm">{room.description}</p>
 
             <div className="flex justify-between items-center text-sm text-gray-500">
-              <div>👥 {battle.players}</div>
-              <div>⏱ {battle.time}</div>
+              <div>👥 {room.players}/4 players</div>
+              <div>⏱ {room.time} min</div>
             </div>
 
             <button
-              onClick={() => handleJoinClick(battle)}
-              disabled={battle.players === "4/4 players"}
+              onClick={() => handleJoinClick(room)}
+              disabled={room.players === "4"}
               className={`w-full py-2 rounded-md bg-gradient-to-r from-purple-500 to-blue-500 text-white transition ${
-                battle.players === "4/4 players"
+                room.players === "4"
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:opacity-90"
               }`}
             >
-              {battle.players === "4/4 players" ? "Full" : "Join Room"}
+              {room.players === "4" ? "Full" : "Join Room"}
             </button>
           </div>
         ))}

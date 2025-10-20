@@ -26,7 +26,7 @@ const RegisterModal = ({ onClose, openLogin }) => {
       setPassword("");
       setUser(res.data.user);
       toast.success(res.data.message);
-      openLogin();
+      onClose();
     } catch (error) {
       toast.error(error.response?.data?.error || "Unexpected error");
     }

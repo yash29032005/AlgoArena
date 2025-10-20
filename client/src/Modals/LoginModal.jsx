@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 
-const LoginModal = ({ onClose, openRegister, setLoginModal }) => {
+const LoginModal = ({ onClose, openRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setUser } = useContext(UserContext);
@@ -21,7 +21,7 @@ const LoginModal = ({ onClose, openRegister, setLoginModal }) => {
       setPassword("");
       setUser(res.data.user);
       toast.success(res.data.message || "Login successful");
-      setLoginModal(false);
+      onClose();
     } catch (error) {
       toast.error(error.response?.data?.error || "Unexpected error");
     }
